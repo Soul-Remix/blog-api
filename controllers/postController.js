@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const Post = require('../models/post');
 
 // GET all Posts
@@ -16,7 +18,6 @@ const postList_get = async (req, res, next) => {
     ]);
     res.status(200).json({ posts, totalItems });
   } catch (err) {
-    err.message = 'Failed to connect to server, Please try again later';
     return next(err);
   }
 };
@@ -38,4 +39,28 @@ const postDetail_get = async (req, res, next) => {
   }
 };
 
-module.exports = { postList_get, postDetail_get };
+// PUT Create Post
+const createPost_put = async (req, res, next) => {
+  try {
+    const joiSchema = Joi.object({
+      title: Joi.string().min(3).max(30).required(),
+      description: Joi.string().min(7).required(),
+    });
+    const { error, value } = joiSchema.validate(req.body);
+    if (error) {
+      return res.status(422).json({ message: 'Invalid request', error });
+    }
+    const post = new Post({
+      title: req.body.title,
+      description: req.body.title,
+      author: req.user.id,
+      image: req.file.path,
+    });
+    await post.save();
+    return res.status(200).json({ message: 'Post Created Successfully' });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = { postList_get, postDetail_get, createPost_put };
