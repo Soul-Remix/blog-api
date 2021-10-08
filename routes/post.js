@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+
 const router = express.Router();
 
 const postController = require('../controllers/postController');
@@ -10,18 +12,34 @@ router.get('/posts', postController.postList_get);
 router.get('/post/:id', postController.postDetail_get);
 
 // Create Post
-router.put('/posts', postController.createPost_put);
+router.put(
+  '/posts',
+  passport.authenticate('jwt', { session: false }),
+  postController.createPost_put
+);
 
 // Edit Post
-router.patch('/post/:id/edit', postController.editPost_patch);
+router.patch(
+  '/post/:id/edit',
+  passport.authenticate('jwt', { session: false }),
+  postController.editPost_patch
+);
 
 // Delete Post
-router.delete('/post/:id/delete', postController.deletePost);
+router.delete(
+  '/post/:id/delete',
+  passport.authenticate('jwt', { session: false }),
+  postController.deletePost
+);
 
 // Create Comment
 router.put('/post/:id/comment', postController.createComment_put);
 
 // Delete Comment
-router.delete('/post/:id/comment', postController.deleteComment);
+router.delete(
+  '/post/:id/comment',
+  passport.authenticate('jwt', { session: false }),
+  postController.deleteComment
+);
 
 module.exports = router;
