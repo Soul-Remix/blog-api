@@ -15,4 +15,7 @@ router.put('/posts', postController.createPost_put);
 // Edit Post
 router.patch('/post/:id/edit', postController.editPost_patch);
 
+// Create Comment
+router.put('/post/:id/comment', postController.createComment_put);
+
 module.exports = router;
