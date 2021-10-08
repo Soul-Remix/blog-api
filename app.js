@@ -12,6 +12,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const postRouter = require('./routes/post');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/v1', postRouter);
+app.use('/api/v1', authRouter);
 
 app.use((error, req, res, next) => {
   error.status = error.status || 500;
