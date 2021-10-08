@@ -63,4 +63,41 @@ const createPost_put = async (req, res, next) => {
   }
 };
 
-module.exports = { postList_get, postDetail_get, createPost_put };
+// PUT Edit Post
+const editPost_patch = async (req, res, next) => {
+  try {
+    const joiSchema = Joi.object({
+      title: Joi.string().min(3).max(30).required(),
+      description: Joi.string().min(7).required(),
+    });
+    const { error, value } = joiSchema.validate(req.body);
+    if (error) {
+      return res.status(422).json({ message: 'Invalid request', error });
+    }
+    const id = req.params.id;
+    const foundPost = await Post.findById(id);
+    if (!foundPost) {
+      return res.status(422).json({
+        message: 'Invalid request',
+        error: { message: 'Post Not Found' },
+      });
+    } else {
+      foundPost.title = req.body.title;
+      foundPost.description = req.body.description;
+      if (req.file) {
+        foundPost.image = req.file.path;
+      }
+      await foundPost.save();
+      return res.status(200).json({ message: 'Post Edited Successfully' });
+    }
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = {
+  postList_get,
+  postDetail_get,
+  createPost_put,
+  editPost_patch,
+};

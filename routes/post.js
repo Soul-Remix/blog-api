@@ -12,4 +12,7 @@ router.get('/post/:id', postController.postDetail_get);
 // Create Post
 router.put('/posts', postController.createPost_put);
 
+// Edit Post
+router.patch('/post/:id/edit', postController.editPost_patch);
+
 module.exports = router;
