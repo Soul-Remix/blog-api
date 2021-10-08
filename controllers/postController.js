@@ -45,6 +45,7 @@ const createPost_put = async (req, res, next) => {
     const joiSchema = Joi.object({
       title: Joi.string().min(3).max(30).required(),
       description: Joi.string().min(7).required(),
+      id: Joi.string(),
     });
     const { error, value } = joiSchema.validate(req.body);
     if (error) {
