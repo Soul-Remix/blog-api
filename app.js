@@ -11,7 +11,7 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const indexRouter = require('./routes/index');
+const postRouter = require('./routes/post');
 
 const app = express();
 
@@ -21,6 +21,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1', indexRouter);
+app.use('/api/v1', postRouter);
+
+app.use((error, req, res, next) => {
+  error.status = error.status || 500;
+  res
+    .status(error.status)
+    .json({ status: error.status, message: error.message });
+});
 
 module.exports = app;
