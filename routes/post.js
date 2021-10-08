@@ -15,6 +15,9 @@ router.put('/posts', postController.createPost_put);
 // Edit Post
 router.patch('/post/:id/edit', postController.editPost_patch);
 
+// Delete Post
+router.delete('/post/:id/delete', postController.deletePost);
+
 // Create Comment
 router.put('/post/:id/comment', postController.createComment_put);
 

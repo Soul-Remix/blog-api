@@ -150,11 +150,30 @@ const deleteComment = async (req, res, next) => {
   }
 };
 
+// Delete Post
+const deletePost = async (req, res, next) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findOneAndRemove(postId);
+    if (!post) {
+      return res.status(422).json({
+        message: 'Invalid request',
+        error: { message: 'Post Not Found' },
+      });
+    }
+    res.status(200).json({ message: 'Deleted Post Successfully' });
+    await Comment.deleteMany({ post: postId });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   postList_get,
   postDetail_get,
   createPost_put,
   editPost_patch,
+  deletePost,
   createComment_put,
   deleteComment,
 };
