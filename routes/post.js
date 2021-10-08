@@ -18,4 +18,7 @@ router.patch('/post/:id/edit', postController.editPost_patch);
 // Create Comment
 router.put('/post/:id/comment', postController.createComment_put);
 
+// Delete Comment
+router.delete('/post/:id/comment', postController.deleteComment);
+
 module.exports = router;

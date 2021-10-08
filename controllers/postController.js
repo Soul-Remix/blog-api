@@ -129,10 +129,32 @@ const createComment_put = async (req, res, next) => {
   }
 };
 
+// Delete Comment
+const deleteComment = async (req, res, next) => {
+  try {
+    const commentId = req.get('commentId');
+    const postId = req.params.id;
+    const comment = await Comment.findOneAndRemove(commentId);
+    if (!comment) {
+      return res.status(422).json({
+        message: 'Invalid request',
+        error: { message: 'Comment Not Found' },
+      });
+    }
+    res.status(200).json({ message: 'Deleted Comment Successfully' });
+    const post = await Post.findById(postId);
+    await post.comments.pull({ _id: commentId });
+    await post.save();
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   postList_get,
   postDetail_get,
   createPost_put,
   editPost_patch,
   createComment_put,
+  deleteComment,
 };
