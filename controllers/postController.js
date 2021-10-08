@@ -10,11 +10,13 @@ const postList_get = async (req, res, next) => {
       Post.find()
         .skip((page - 1) * limit)
         .limit(limit)
+        .sort({ createdAt: -1 })
         .populate('author')
         .populate('comments'),
     ]);
     res.status(200).json({ posts, totalItems });
   } catch (err) {
+    err.message = 'Failed to connect to server, Please try again later';
     return next(err);
   }
 };
