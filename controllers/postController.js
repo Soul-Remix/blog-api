@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const Joi = require('joi');
 
 const Post = require('../models/post');
@@ -58,7 +60,7 @@ const createPost = async (req, res, next) => {
       image: req.file.path,
     });
     await post.save();
-    return res.status(200).json({ message: 'Post Created Successfully' });
+    return res.status(200).json({ message: 'Post Created Successfully', post });
   } catch (err) {
     return next(err);
   }
@@ -83,6 +85,7 @@ const editPost = async (req, res, next) => {
       foundPost.title = req.body.title;
       foundPost.description = req.body.description;
       if (req.file) {
+        clearImage(foundPost.image);
         foundPost.image = req.file.path;
       }
       await foundPost.save();
@@ -101,6 +104,7 @@ const deletePost = async (req, res, next) => {
     if (!post) {
       return res.status(422).json({ message: 'Post Not Found' });
     }
+    clearImage(post.image);
     res.status(200).json({ message: 'Deleted Post Successfully' });
     await Comment.deleteMany({ post: postId });
   } catch (err) {
@@ -167,3 +171,8 @@ module.exports = {
   createComment,
   deleteComment,
 };
+
+function clearImage(fPath) {
+  filePath = path.join(__dirname, '..', fPath);
+  fs.unlink(filePath, (err) => console.log(err));
+}
