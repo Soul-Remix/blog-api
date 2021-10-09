@@ -34,6 +34,8 @@ const postDetail = async (req, res, next) => {
       err.status = 404;
       return next(err);
     }
+    post.views += 1;
+    await post.save();
     res.status(200).json(post);
   } catch (err) {
     err.message = 'Failed to connect to server, Please try again later';
