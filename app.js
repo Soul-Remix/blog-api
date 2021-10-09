@@ -5,6 +5,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const passport = require('passport');
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 const jwtStrategy = require('./config/passport');
@@ -22,10 +23,10 @@ const app = express();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images');
+    cb(null, './images');
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname);
+    cb(null, uuidv4());
   },
 });
 
@@ -46,7 +47,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multer({ storage: fileStorage, fileFilter }).single('image'));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'images')));
 
 passport.use(jwtStrategy);
 

@@ -14,7 +14,6 @@ const postList = async (req, res, next) => {
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ createdAt: -1 })
-        .populate('author')
         .populate('comments'),
     ]);
     res.status(200).json({ posts, totalItems });
@@ -55,7 +54,7 @@ const createPost = async (req, res, next) => {
     const post = new Post({
       title: req.body.title,
       description: req.body.title,
-      author: req.user.id,
+      author: req.user._id,
       image: req.file.path,
     });
     await post.save();
