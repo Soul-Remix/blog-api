@@ -6,34 +6,34 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 
 /* GET home page. */
-router.get('/posts', postController.postList_get);
+router.get('/posts', postController.postList);
 
 // GET single post
-router.get('/post/:id', postController.postDetail_get);
+router.get('/post/:id', postController.postDetail);
 
 // Create Post
 router.put(
   '/posts',
   passport.authenticate('jwt', { session: false }),
-  postController.createPost_put
+  postController.createPost
 );
 
 // Edit Post
 router.patch(
-  '/post/:id/edit',
+  '/post/:id',
   passport.authenticate('jwt', { session: false }),
-  postController.editPost_patch
+  postController.editPost
 );
 
 // Delete Post
 router.delete(
-  '/post/:id/delete',
+  '/post/:id',
   passport.authenticate('jwt', { session: false }),
   postController.deletePost
 );
 
 // Create Comment
-router.put('/post/:id/comment', postController.createComment_put);
+router.put('/post/:id/comment', postController.createComment);
 
 // Delete Comment
 router.delete(
