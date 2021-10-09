@@ -79,10 +79,7 @@ const editPost = async (req, res, next) => {
     const id = req.params.id;
     const foundPost = await Post.findById(id);
     if (!foundPost) {
-      return res.status(422).json({
-        message: 'Invalid request',
-        error: { message: 'Post Not Found' },
-      });
+      return res.status(422).json({ message: 'Post Not Found' });
     } else {
       foundPost.title = req.body.title;
       foundPost.description = req.body.description;
@@ -103,10 +100,7 @@ const deletePost = async (req, res, next) => {
     const postId = req.params.id;
     const post = await Post.findOneAndRemove(postId);
     if (!post) {
-      return res.status(422).json({
-        message: 'Invalid request',
-        error: { message: 'Post Not Found' },
-      });
+      return res.status(422).json({ message: 'Post Not Found' });
     }
     res.status(200).json({ message: 'Deleted Post Successfully' });
     await Comment.deleteMany({ post: postId });
@@ -129,10 +123,7 @@ const createComment = async (req, res, next) => {
     const id = req.params.id;
     const post = await Post.findById(id).populate('comments');
     if (!post) {
-      return res.status(422).json({
-        message: 'Invalid request',
-        error: { message: 'Post Not Found' },
-      });
+      return res.status(422).json({ message: 'Post Not Found' });
     }
     const comment = new Comment({
       userName: req.body.userName,
