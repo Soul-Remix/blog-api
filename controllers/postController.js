@@ -47,7 +47,7 @@ const postDetail = async (req, res, next) => {
 const createPost = async (req, res, next) => {
   try {
     const joiSchema = Joi.object({
-      title: Joi.string().min(3).max(30).required(),
+      title: Joi.string().min(3).max(100).required(),
       description: Joi.string().min(7).required(),
       id: Joi.string(),
     });
@@ -72,7 +72,7 @@ const createPost = async (req, res, next) => {
 const editPost = async (req, res, next) => {
   try {
     const joiSchema = Joi.object({
-      title: Joi.string().min(3).max(30).required(),
+      title: Joi.string().min(3).max(100).required(),
       description: Joi.string().min(7).required(),
     });
     const { error, value } = joiSchema.validate(req.body);
