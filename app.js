@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const passport = require('passport');
 const { v4: uuidv4 } = require('uuid');
+const cors = require('cors');
 require('dotenv').config();
 
 const jwtStrategy = require('./config/passport');
@@ -42,6 +43,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
