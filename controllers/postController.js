@@ -18,8 +18,12 @@ const postList = async (req, res, next) => {
         .sort({ createdAt: -1 })
         .populate('comments'),
     ]);
-    const nextPage = totalItems / 10 > page ? page++ : false;
-    const hasNextPage = nextPage ? true : false;
+    let nextPage = page;
+    let hasNextPage = false;
+    if (totalItems / 10 > page) {
+      nextPage = +nextPage + 1;
+      hasNextPage = true;
+    }
     res.status(200).json({ posts, totalItems, nextPage, hasNextPage });
   } catch (err) {
     return next(err);
