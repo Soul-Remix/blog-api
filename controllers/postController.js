@@ -34,7 +34,9 @@ const postList = async (req, res, next) => {
 const postDetail = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const post = await Post.findById(id).populate('author');
+    const post = await Post.findById(id)
+      .populate('author')
+      .populate('comments');
     if (!post) {
       const err = new Error('Failed to find a post');
       err.status = 404;
