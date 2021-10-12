@@ -145,7 +145,9 @@ const createComment = async (req, res, next) => {
     });
     post.comments.push(comment);
     await Promise.all([comment.save(), post.save()]);
-    return res.status(200).json({ message: 'Created Comment Successfully' });
+    return res
+      .status(200)
+      .json({ message: 'Created Comment Successfully', comment });
   } catch (err) {
     return next(err);
   }
@@ -163,7 +165,7 @@ const deleteComment = async (req, res, next) => {
         error: { message: 'Comment Not Found' },
       });
     }
-    res.status(200).json({ message: 'Deleted Comment Successfully' });
+    res.status(200).json({ message: 'Deleted Comment Successfully', comment });
     const post = await Post.findById(postId);
     await post.comments.pull({ _id: commentId });
     await post.save();
