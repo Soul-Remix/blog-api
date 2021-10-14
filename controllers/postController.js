@@ -5,7 +5,19 @@ const Joi = require('joi');
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
-// GET all Posts
+// GET All Posts
+const postAll = async (req, res, next) => {
+  try {
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate('comments');
+    return res.status(200).json({ posts });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+// GET 10 Posts Paginated
 const postList = async (req, res, next) => {
   try {
     const page = req.query.page || 1;
@@ -99,7 +111,9 @@ const editPost = async (req, res, next) => {
         foundPost.image = req.file.path;
       }
       await foundPost.save();
-      return res.status(200).json({ message: 'Post Edited Successfully' });
+      return res
+        .status(200)
+        .json({ message: 'Post Edited Successfully', post: foundPost });
     }
   } catch (err) {
     return next(err);
@@ -175,6 +189,7 @@ const deleteComment = async (req, res, next) => {
 };
 
 module.exports = {
+  postAll,
   postList,
   postDetail,
   createPost,

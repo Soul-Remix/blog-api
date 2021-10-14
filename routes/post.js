@@ -5,7 +5,10 @@ const router = express.Router();
 
 const postController = require('../controllers/postController');
 
-/* GET home page. */
+// Get All Posts
+router.get('/posts/all', postController.postAll);
+
+// GET 10 Posts.
 router.get('/posts', postController.postList);
 
 // GET single post
