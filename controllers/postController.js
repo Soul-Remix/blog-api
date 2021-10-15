@@ -129,7 +129,7 @@ const deletePost = async (req, res, next) => {
       return res.status(422).json({ message: 'Post Not Found' });
     }
     clearImage(post.image);
-    res.status(200).json({ message: 'Deleted Post Successfully' });
+    res.status(200).json({ message: 'Deleted Post Successfully', post });
     await Comment.deleteMany({ post: postId });
   } catch (err) {
     return next(err);
@@ -178,11 +178,14 @@ const deleteComment = async (req, res, next) => {
         message: 'Invalid request',
         error: { message: 'Comment Not Found' },
       });
+    } else {
+      res
+        .status(200)
+        .json({ message: 'Deleted Comment Successfully', comment });
+      const post = await Post.findById(postId);
+      await post.comments.pull({ _id: commentId });
+      await post.save();
     }
-    res.status(200).json({ message: 'Deleted Comment Successfully', comment });
-    const post = await Post.findById(postId);
-    await post.comments.pull({ _id: commentId });
-    await post.save();
   } catch (err) {
     return next(err);
   }
