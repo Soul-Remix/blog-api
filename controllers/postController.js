@@ -123,11 +123,12 @@ const editPost = async (req, res, next) => {
 // Delete Post
 const deletePost = async (req, res, next) => {
   try {
-    const postId = req.params.id;
-    const post = await Post.findOneAndRemove(postId);
+    const postId = req.get('postId');
+    const post = await Post.findById(postId);
     if (!post) {
       return res.status(422).json({ message: 'Post Not Found' });
     }
+    await Post.findByIdAndDelete(postId);
     clearImage(post.image);
     res.status(200).json({ message: 'Deleted Post Successfully', post });
     await Comment.deleteMany({ post: postId });

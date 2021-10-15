@@ -30,7 +30,7 @@ router.patch(
 
 // Delete Post
 router.delete(
-  '/post/:id',
+  '/posts',
   passport.authenticate('jwt', { session: false }),
   postController.deletePost
 );
