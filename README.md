@@ -1,7 +1,6 @@
 # Blog API
 
 A blog api built using node & expressJS    
-Hosted at Heroku
 
 [Blog Frontend](https://github.com/Soul-Remix/blog-frontend)   
 [Blog Admin](https://github.com/Soul-Remix/blog-admin)
